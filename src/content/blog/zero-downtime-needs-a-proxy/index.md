@@ -1,6 +1,6 @@
 ---
 title: "Why zero-downtime deployments need a reverse proxy"
-description: "The one architectural constraint people miss when building GitOps for Docker Compose — and why I couldn't design it away."
+description: "The one architectural constraint people miss when building GitOps for Docker Compose, and why I couldn't design it away."
 date: "2026-07-24"
 tags:
   - gitops
@@ -9,7 +9,7 @@ tags:
 ---
 
 I've been building [accelero](https://accelero.sh) in the open for a while
-now — think ArgoCD/Flux, but for Docker Compose instead of Kubernetes. Git is
+now. Think ArgoCD/Flux, but for Docker Compose instead of Kubernetes. Git is
 the source of truth, drift gets detected and corrected, deployments happen
 automatically. The hard part wasn't the reconciliation loop. It was the two
 words in the tagline: *zero downtime*.
@@ -23,7 +23,7 @@ felt like a design failure. It isn't. It's physics.
 
 The obvious approach: pull the new image, stop the old container, start the
 new one. Between `stop` and `healthy`, every request hits a closed port.
-That's your downtime window — usually a few seconds, but a few seconds at
+That's your downtime window, usually a few seconds, but a few seconds at
 scale is a lot of failed requests.
 
 So you flip it: start the new container *first*, then stop the old one. Better,
@@ -36,7 +36,7 @@ two containers want the same published port, one of them loses.
 
 The only place that decision can live is a layer that both containers register
 with and that can shift traffic atomically: a reverse proxy. Caddy, Traefik,
-nginx — pick your flavor. accelero brings up the new replica, waits for its
+nginx: pick your flavor. accelero brings up the new replica, waits for its
 healthcheck to pass, tells the proxy to route to it, *then* tears down the old
 one. The proxy holds the connection state so no in-flight request gets dropped.
 
@@ -46,7 +46,7 @@ backends. The tool just orchestrates the handoff.
 
 ## Why I stopped trying to hide it
 
-I spent real time trying to make the proxy optional — some mode where accelero
+I spent real time trying to make the proxy optional, some mode where accelero
 could do "good enough" rolling updates on bare Docker. Every version of that
 leaked downtime somewhere: a dropped connection during the swap, a race on the
 port bind, a healthcheck that passed before the app was actually ready.
