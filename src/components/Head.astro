@@ -65,6 +65,39 @@ const { title, description, image = "/og-default.png" } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<!-- JSON-LD structured data (Person + WebSite) -->
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://arbianshkodra.com/#person",
+        name: "Arbian Shkodra",
+        url: "https://arbianshkodra.com",
+        sameAs: [
+          "https://github.com/arbianshkodra",
+          "https://x.com/arbianshkodra",
+        ],
+        jobTitle: "Builder & experimenter",
+        description:
+          "Builder and experimenter working at the edge of AI agents and infrastructure.",
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://arbianshkodra.com/#website",
+        url: "https://arbianshkodra.com",
+        name: "arbianshkodra",
+        description:
+          "Terminal-aesthetic personal blog on AI agents, LLM tooling, distributed systems, and messaging infrastructure at scale.",
+        publisher: { "@id": "https://arbianshkodra.com/#person" },
+      },
+    ],
+  })}
+/>
+
 <!-- PageFind -->
 <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
 <script is:inline src="/pagefind/pagefind-ui.js"></script>
