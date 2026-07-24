@@ -214,7 +214,9 @@ const { title, description, image = "/astro-micro.jpg" } = Astro.props;
 
   function addCopyCodeButtons() {
     let copyButtonLabel = "📋";
-    let codeBlocks = Array.from(document.querySelectorAll("pre"));
+    let codeBlocks = Array.from(
+      document.querySelectorAll("pre:not([data-no-copy])"),
+    );
 
     async function copyCode(codeBlock, copyButton) {
       const codeText = codeBlock.innerText;
