@@ -7,7 +7,7 @@ import { readingTime } from "@lib/utils";
 import BackToPrevious from "@components/BackToPrevious.astro";
 import PostNavigation from "@components/PostNavigation.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-// import Giscus from "@components/Giscus.astro"; // re-enable with comments
+import Giscus from "@components/Giscus.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -92,15 +92,9 @@ const { Content, headings } = await render(post);
       <div class="mt-24">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </div>
-      {/* Comments disabled until Giscus is wired to arbianshkodra/blog.
-          To enable: turn on GitHub Discussions on the repo, run the
-          setup at https://giscus.app, paste the real data-repo /
-          data-repo-id / data-category-id into src/components/Giscus.astro,
-          then uncomment the block below.
       <div class="mt-24">
         <Giscus />
       </div>
-      */}
     </article>
   </Container>
 </Layout>
