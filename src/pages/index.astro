@@ -1,0 +1,152 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import { SITE, HOME, SOCIALS } from "@consts";
+import ArrowCard from "@components/ArrowCard.astro";
+import Link from "@components/Link.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const blog = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+
+const projects: CollectionEntry<"projects">[] = (
+  await getCollection("projects")
+)
+  .filter((project) => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+---
+
+<Layout title={HOME.TITLE} description={HOME.DESCRIPTION}>
+  <Container>
+    <aside data-pagefind-ignore>
+      <!-- terminal hero -->
+      <div
+        class="rounded-md border border-neutral-300 bg-neutral-100/60 dark:border-neutral-800 dark:bg-neutral-900/40"
+      >
+        <div
+          class="flex items-center gap-2 border-b border-neutral-300 px-4 py-2 dark:border-neutral-800"
+        >
+          <span class="size-3 rounded-full bg-red-400/80"></span>
+          <span class="size-3 rounded-full bg-yellow-400/80"></span>
+          <span class="size-3 rounded-full bg-green-400/80"></span>
+          <span class="ml-2 text-xs text-neutral-500">— zsh —</span>
+        </div>
+        <div class="space-y-1 p-4 text-sm leading-relaxed">
+          <p>
+            <span class="text-term-green-dim">arbian@shkodra</span><span
+              class="text-neutral-500">:</span
+            ><span class="text-sky-500 dark:text-sky-400">~</span><span
+              class="text-neutral-500">$</span
+            > whoami
+          </p>
+          <p class="text-black dark:text-neutral-200">
+            Arbian Shkodra — engineering.
+          </p>
+          <p class="pt-2">
+            <span class="text-term-green-dim">arbian@shkodra</span><span
+              class="text-neutral-500">:</span
+            ><span class="text-sky-500 dark:text-sky-400">~</span><span
+              class="text-neutral-500">$</span
+            > cat about.txt
+          </p>
+          <p class="text-black dark:text-neutral-200">
+            I build messaging infrastructure at scale — SMS, WhatsApp, RCS,
+            millions of messages a day. I care about traces over logs,
+            boring tech over shiny tech, and shipping the smallest change
+            that solves the problem.
+          </p>
+          <p class="pt-2">
+            <span class="text-term-green-dim">arbian@shkodra</span><span
+              class="text-neutral-500">:</span
+            ><span class="text-sky-500 dark:text-sky-400">~</span><span
+              class="text-neutral-500">$</span
+            > ls ~/interests
+          </p>
+          <p class="text-black dark:text-neutral-200">
+            distributed-systems/ &nbsp; gitops/ &nbsp; observability/
+            &nbsp; kafka/ &nbsp; go/ &nbsp; kubernetes/
+          </p>
+          <p class="pt-2">
+            <span class="text-term-green-dim">arbian@shkodra</span><span
+              class="text-neutral-500">:</span
+            ><span class="text-sky-500 dark:text-sky-400">~</span><span
+              class="text-neutral-500">$</span
+            > <span class="cursor-blink"></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-16 space-y-16">
+        <section class="animate space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-y-2">
+            <h2 class="font-semibold text-black dark:text-term-green">
+              # latest posts
+            </h2>
+            <Link href="/blog"> see all → </Link>
+          </div>
+          <ul class="not-prose flex flex-col gap-4">
+            {
+              blog.map((post) => (
+                <li>
+                  <ArrowCard entry={post} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="animate space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-y-2">
+            <h2 class="font-semibold text-black dark:text-term-green">
+              # recent projects
+            </h2>
+            <Link href="/projects"> see all → </Link>
+          </div>
+          <ul class="not-prose flex flex-col gap-4">
+            {
+              projects.map((project) => (
+                <li>
+                  <ArrowCard entry={project} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="animate space-y-4">
+          <h2 class="font-semibold text-black dark:text-term-green">
+            # connect
+          </h2>
+          <ul class="not-prose flex flex-wrap gap-2">
+            {
+              SOCIALS.map((SOCIAL) => (
+                <li class="flex gap-x-2 text-nowrap">
+                  <Link
+                    href={SOCIAL.HREF}
+                    external
+                    aria-label={`${SITE.TITLE} on ${SOCIAL.NAME}`}
+                  >
+                    {SOCIAL.NAME}
+                  </Link>
+                  {"/"}
+                </li>
+              ))
+            }
+            <li class="line-clamp-1">
+              <Link
+                href={`mailto:${SITE.EMAIL}`}
+                aria-label={`Email ${SITE.TITLE}`}
+              >
+                {SITE.EMAIL}
+              </Link>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </aside>
+  </Container>
+</Layout>

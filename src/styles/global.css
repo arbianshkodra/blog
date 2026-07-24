@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Everything is mono. This is a terminal. */
+  --font-sans: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* Terminal palette */
+  --color-term-green: #4ade80;
+  --color-term-green-dim: #22c55e;
+  --color-term-amber: #fbbf24;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-neutral-800, currentColor);
+  }
+}
+
+@layer utilities {
+  html {
+    overflow-y: auto;
+    color-scheme: dark;
+    scroll-padding-top: 100px;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    @apply size-full;
+  }
+
+  body {
+    @apply font-mono antialiased;
+    @apply flex flex-col;
+    @apply bg-neutral-50 dark:bg-[#0a0a0a];
+    @apply text-neutral-700 dark:text-neutral-300;
+  }
+
+  /* subtle CRT scanline wash on dark mode only */
+  html.dark body::before {
+    content: '';
+    @apply pointer-events-none fixed inset-0 z-[9999];
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+  }
+
+  header {
+    @apply fixed left-0 right-0 top-0 z-50 py-6;
+    @apply bg-neutral-50/80 dark:bg-[#0a0a0a]/80;
+    @apply backdrop-blur-sm;
+    @apply border-b border-neutral-200 dark:border-neutral-800;
+  }
+
+  main {
+    @apply flex-1 py-32;
+  }
+
+  footer {
+    @apply py-6 text-sm;
+  }
+
+  article {
+    @apply prose prose-neutral max-w-full dark:prose-invert prose-img:mx-auto prose-img:my-auto;
+    @apply prose-headings:font-semibold;
+    @apply prose-headings:text-black dark:prose-headings:text-term-green;
+    @apply prose-code:text-term-green-dim prose-code:before:content-none prose-code:after:content-none;
+  }
+}
+
+@layer utilities {
+  article a {
+    @apply font-mono text-term-green-dim underline underline-offset-[3px];
+    @apply decoration-term-green/40;
+    @apply transition-colors duration-200 ease-in-out;
+  }
+  article a:hover {
+    @apply text-term-green;
+    @apply decoration-term-green;
+  }
+}
+
+/* blinking terminal cursor */
+.cursor-blink::after {
+  content: '\2588';
+  @apply text-term-green;
+  animation: blink 1.1s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate {
+  @apply -translate-y-3 opacity-0;
+  @apply transition-all duration-300 ease-out;
+}
+
+.animate.show {
+  @apply translate-y-0 opacity-100;
+}
+
+html #back-to-top {
+  @apply pointer-events-none opacity-0;
+}
+
+html.scrolled #back-to-top {
+  @apply pointer-events-auto opacity-100;
+}
+
+/* shiki config */
+pre {
+  @apply border border-neutral-300 py-5 dark:border-neutral-800;
+}
+
+:root {
+  --astro-code-foreground: #09090b;
+  --astro-code-background: #fafafa;
+  --astro-code-token-comment: #a19595;
+  --astro-code-token-keyword: #f47067;
+  --astro-code-token-string: #00a99a;
+  --astro-code-token-function: #429996;
+  --astro-code-token-constant: #2b70c5;
+  --astro-code-token-parameter: #4e8fdf;
+  --astro-code-token-string-expression: #ae42a0;
+  --astro-code-token-punctuation: #8996a3;
+  --astro-code-token-link: #8d85ff;
+}
+
+.dark {
+  --astro-code-foreground: #d4d4d4;
+  --astro-code-background: #0d0d0d;
+  --astro-code-token-comment: #6b7280;
+  --astro-code-token-keyword: #f47067;
+  --astro-code-token-string: #4ade80;
+  --astro-code-token-function: #6eafad;
+  --astro-code-token-constant: #b3cceb;
+  --astro-code-token-parameter: #4e8fdf;
+  --astro-code-token-string-expression: #bf7db6;
+  --astro-code-token-punctuation: #8996a3;
+  --astro-code-token-link: #8d85ff;
+}
+
+/* copy code button on codeblocks */
+.copy-code {
+  @apply absolute right-3 top-3 grid size-9 place-content-center rounded-sm border border-neutral-300 bg-neutral-100 text-center duration-300 ease-in-out dark:border-neutral-800 dark:bg-neutral-900;
+}
+
+.copy-code:hover {
+  @apply bg-[#E9E9E9] transition-colors dark:bg-[#232323];
+}
+
+.copy-code:active {
+  @apply scale-90 transition-transform;
+}
