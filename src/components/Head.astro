@@ -25,11 +25,16 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  article?: {
+    publishedTime: string;
+    tags?: string[];
+  };
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = "/og-default.png" } = Astro.props;
+const { title, description, image = "/og-default.png", article } = Astro.props;
+const isArticle = !!article;
 ---
 
 <!-- Global Metadata -->
@@ -52,11 +57,20 @@ const { title, description, image = "/og-default.png" } = Astro.props;
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={isArticle ? "article" : "website"} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+{
+  isArticle && (
+    <>
+      <meta property="article:published_time" content={article!.publishedTime} />
+      <meta property="article:author" content="Arbian Shkodra" />
+      {article!.tags?.map((t) => <meta property="article:tag" content={t} />)}
+    </>
+  )
+}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
@@ -94,6 +108,24 @@ const { title, description, image = "/og-default.png" } = Astro.props;
           "Terminal-aesthetic personal blog on AI agents, LLM tooling, distributed systems, and messaging infrastructure at scale.",
         publisher: { "@id": "https://arbianshkodra.com/#person" },
       },
+      ...(isArticle
+        ? [
+            {
+              "@type": "BlogPosting",
+              "@id": canonicalURL.href + "#article",
+              headline: title,
+              description: description,
+              image: new URL(image, Astro.url).href,
+              datePublished: article!.publishedTime,
+              dateModified: article!.publishedTime,
+              author: { "@id": "https://arbianshkodra.com/#person" },
+              publisher: { "@id": "https://arbianshkodra.com/#person" },
+              mainEntityOfPage: canonicalURL.href,
+              keywords: article!.tags?.join(", "),
+              url: canonicalURL.href,
+            },
+          ]
+        : []),
     ],
   })}
 />
