@@ -3,7 +3,7 @@ import type { Metadata, Site, Socials } from "@types";
 export const SITE: Site = {
   TITLE: "arbianshkodra",
   DESCRIPTION:
-    "Notes on distributed systems, GitOps, and building messaging infrastructure at scale.",
+    "Builder & experimenter working at the edge of AI agents and infrastructure. Notes on agents, LLM tooling, distributed systems, and the things I can't stop poking at.",
   EMAIL: "hello@arbianshkodra.com",
   NUM_POSTS_ON_HOMEPAGE: 5,
   NUM_PROJECTS_ON_HOMEPAGE: 3,
@@ -12,12 +12,13 @@ export const SITE: Site = {
 export const HOME: Metadata = {
   TITLE: "~",
   DESCRIPTION:
-    "Arbian Shkodra — engineering. Distributed systems, GitOps, messaging infrastructure.",
+    "Arbian Shkodra — builder & experimenter. AI agents, LLM tooling, distributed systems, and messaging infrastructure at scale.",
 };
 
 export const BLOG: Metadata = {
   TITLE: "blog",
-  DESCRIPTION: "Long-form notes on the things I build and break.",
+  DESCRIPTION:
+    "Experiments and long-form notes — AI agents, LLM tooling, and the infrastructure underneath.",
 };
 
 export const PROJECTS: Metadata = {
