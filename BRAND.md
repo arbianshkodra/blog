@@ -61,6 +61,6 @@ mono headings/code + a proportional body, documented here first.
 ## Identity / positioning
 
 Arbian is framed as a **builder & experimenter at the edge of AI agents and
-infrastructure** — not pinned to one language or "engineering." AI /
-agents / LLM tooling lead; messaging-infra depth is one domain among several,
+infrastructure** — not pinned to one language or job title. AI / agents / LLM
+tooling lead; systems and infrastructure depth is one domain among several,
 not the headline. Keep hero + metadata consistent with this framing.

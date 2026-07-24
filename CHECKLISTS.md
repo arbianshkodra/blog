@@ -17,17 +17,15 @@ Before a post goes live (pushed to `main` / deployed):
       serves it. (See `CLAUDE.md` → Writing a post.)
 - [ ] **Claims verified** — every factual claim checked against a primary
       source. Nothing fabricated. No invented URLs, benchmarks, or quotes.
-- [ ] **Guardrails** — no [redacted] internals / incidents / customer data.
+- [ ] **Guardrails** — no employer internals, incidents, or customer data.
       Framed as "what I learned," not "what happened at work."
 - [ ] **Cut pass** — bias to cut; preamble killed; no paragraph that can be
       deleted without loss.
 - [ ] **AI-tell pass** — no em/en-dashes; run banned-word / humanizer check.
-      The concrete detail only Arbian has is what makes it his.
+      The concrete detail only I have is what makes it mine.
 - [ ] **Links use descriptive text** — never a raw URL as link text.
 - [ ] **Images have alt text** — describe the image for a no-vision reader.
 - [ ] **Build passes** — `npm run build` (clean, sitemap + RSS + Pagefind ok).
-- [ ] **Right gh account** — `gh auth switch --user arbianshkodra` before
-      push; switch back to `work-account` after.
 
 ---
 
