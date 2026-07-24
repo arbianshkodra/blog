@@ -4,7 +4,7 @@ export const SITE: Site = {
   TITLE: "arbianshkodra",
   DESCRIPTION:
     "Builder & experimenter working at the edge of AI agents and infrastructure. Notes on agents, LLM tooling, distributed systems, and the things I can't stop poking at.",
-  EMAIL: "hello@arbianshkodra.com",
+  EMAIL: "arbianshkodra@gmail.com",
   NUM_POSTS_ON_HOMEPAGE: 5,
   NUM_PROJECTS_ON_HOMEPAGE: 3,
 };
