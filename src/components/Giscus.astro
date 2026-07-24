@@ -1,17 +1,11 @@
 <!--
-  GISCUS COMMENTS — NOT YET CONFIGURED FOR THIS BLOG.
-  The data-repo / data-repo-id / data-category-id below still point at the
-  theme author's repo (trevortylerlee/astro-micro). Until you replace them,
-  comments will NOT post to arbianshkodra/blog.
+  GISCUS COMMENTS — configured for arbianshkodra/blog.
+  Comments are stored as GitHub Discussions in the "Announcements" category.
+  Mapping is by pathname, so each post gets its own discussion thread.
 
-  To make it work:
-    1. Enable GitHub Discussions on arbianshkodra/blog
-       (repo Settings -> General -> Features -> Discussions).
-    2. Go to https://giscus.app, enter arbianshkodra/blog, pick a category
-       (e.g. Announcements).
-    3. Copy the generated data-repo-id and data-category-id and replace the
-       three TODO values below.
-  Repo is public, so Giscus will work once these are set.
+  Requires the Giscus GitHub App to be installed on the repo with access to
+  arbianshkodra/blog: https://github.com/apps/giscus
+  (Discussions is already enabled; repo + category IDs below are real.)
 -->
 <div class="giscus"></div>
 
@@ -20,15 +14,15 @@
   data-astro-rerun
   src="https://giscus.app/client.js"
   data-repo="arbianshkodra/blog"
-  data-repo-id="TODO_REPO_ID_FROM_GISCUS_APP"
+  data-repo-id="R_kgDOTiEAbg"
   data-category="Announcements"
-  data-category-id="TODO_CATEGORY_ID_FROM_GISCUS_APP"
+  data-category-id="DIC_kwDOTiEAbs4DB4I7"
   data-mapping="pathname"
   data-strict="0"
   data-reactions-enabled="1"
   data-emit-metadata="0"
   data-input-position="top"
-  data-theme="preferred_color_scheme"
+  data-theme="dark"
   data-lang="en"
   data-loading="lazy"
   crossorigin="anonymous"
