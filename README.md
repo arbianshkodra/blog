@@ -1,11 +1,44 @@
-# Introducing [Astro Micro 🔬](https://astro-micro.vercel.app/)
+# arbianshkodra.com
 
-Astro Micro is an accessible theme for Astro. It's a fork of [Mark Horn's](https://github.com/markhorn-dev) popular theme [Astro Nano](https://astro-nano-demo.vercel.app/). Like Nano, Micro comes with zero frameworks installed.
+Source for [arbianshkodra.com](https://arbianshkodra.com) — the personal blog
+of Arbian Shkodra. Builder and experimenter working at the edge of AI agents
+and infrastructure.
 
-Micro adds features like [Pagefind](https://pagefind.app) for search, [Giscus](https://giscus.app) for comments, and more. For a full list of changes, see this [blog post](https://astro-micro.vercel.app/blog/00-micro-changelog).
+A terminal-aesthetic site: monospace, green-on-dark, shell prompts. Writing
+about AI agents, LLM tooling, distributed systems, GitOps, and the messaging
+infrastructure I work on at scale.
 
-Micro still comes with everything great about Nano — full type safety, a sitemap, an RSS feed, and Markdown + MDX support. Styled with TailwindCSS and preconfigured with system, light, and dark themes.
+## Stack
 
----
+- [Astro](https://astro.build) static site generator (built on the Astro
+  Micro theme, heavily customized into a terminal aesthetic)
+- [Tailwind CSS](https://tailwindcss.com) v4
+- MDX, with sitemap, RSS, and [Pagefind](https://pagefind.app) search
+- Zero client-side framework JS
+- Deployed via [Cloudflare Pages](https://pages.cloudflare.com)
 
-![astro-micro](https://github.com/user-attachments/assets/fc9b55b9-53e5-4933-9d23-936e1c61e6c2)
+## Development
+
+```sh
+npm install      # restore dependencies
+npm run dev      # local dev server at http://localhost:4321
+npm run build    # production build to ./dist (also builds sitemap + RSS + search index)
+```
+
+## Project docs
+
+- [`CLAUDE.md`](CLAUDE.md) — the working playbook: positioning, publishing
+  guardrails, writing discipline, structure, and the deploy setup.
+- [`BRAND.md`](BRAND.md) — canonical design tokens (palette, type, microcopy).
+- [`CHECKLISTS.md`](CHECKLISTS.md) — pre-publish and layout-change checklists.
+
+## Licenses
+
+- **Code / infrastructure** (Astro config, layouts, components, styles,
+  scripts): [CC0 1.0](LICENSE) — public domain, use freely.
+- **Content** (`src/content/`): [CC BY-NC-ND 4.0](src/content/LICENSE) — share
+  with attribution, no commercial use, no derivatives.
+
+Built on [Astro Micro](https://github.com/trevortylerlee/astro-micro) by Trevor
+Lee (MIT), a fork of [Astro Nano](https://github.com/markhorn-dev/astro-nano)
+by Mark Horn.
