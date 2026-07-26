@@ -26,9 +26,13 @@ work lessons in the abstract as reusable principles; keep internals out.
 
 ## Tier 2 — strong, in the wheelhouse
 
-- **The reverse-proxy insight, generalized.** Follow-up to the live post:
-  stable-address-in-front-of-unstable-backends as a recurring pattern
-  (deploys, service discovery, agent tool routing).
+- **Stable addresses everywhere: the pattern I keep rediscovering.** The
+  reverse-proxy post already names the principle in its closing paragraph, so
+  this one is NOT a rerun of it. Spine: the same indirection shows up in three
+  places that look unrelated until you line them up (deploy handoff, service
+  discovery, agent tool routing), and the interesting part is where the
+  analogy breaks. Only write this with at least two non-deploy examples I
+  have actually built; otherwise it's a restatement and should be cut.
 - **RED dashboards from traces, not logs.** "Traces over logs" as a concrete
   how-to: deriving rate/errors/duration from spans.
 - **Provider abstraction layers: the interface you regret.** Messaging
