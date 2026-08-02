@@ -26,6 +26,13 @@ work lessons in the abstract as reusable principles; keep internals out.
 
 ## Tier 2 — strong, in the wheelhouse
 
+- **Causal consistency vs. declared read policy.** The fallback post names
+  causal consistency as the better tool for read-after-write and then moves
+  on. This one is the other half: carrying a write position forward, what
+  `synchronous_commit = remote_apply` actually costs, and why "read your own
+  write" is a different requirement from "this read must never be stale."
+  Only write it with a real implementation behind it.
+
 - **Stable addresses everywhere: the pattern I keep rediscovering.** The
   reverse-proxy post already names the principle in its closing paragraph, so
   this one is NOT a rerun of it. Spine: the same indirection shows up in three
