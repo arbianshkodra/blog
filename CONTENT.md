@@ -9,11 +9,26 @@ Discipline reminder (see CLAUDE.md): one spine per post, verify every claim,
 bias to cut, no em/en-dashes, first person from real experience. Frame
 work lessons in the abstract as reusable principles; keep internals out.
 
+## Written
+
+- **Why zero-downtime deployments need a reverse proxy** (2026-07-24)
+- **Your read-replica fallback only catches absence** (2026-08-02)
+- **202 Accepted is a promise, not a receipt** (2026-08-21). Covers async
+  accept vs. edge validation, parse-don't-validate, alerting on the failure
+  reason mix rather than throughput, and the cost of failing fast. Anything
+  below that restates one of those is a rerun and should be cut.
+
 ## Tier 1 — highest leverage, write first
 
 - **What high-throughput messaging teaches you about backpressure.**
   Where queues save you, where they lie to you, why "just add Kafka" isn't an
   answer. Principles, not internals. Most defensible post.
+  **Narrowed after the 202 post:** that one already argued a queue accepts work
+  you cannot deliver, and already made the alerting case (failure reason mix,
+  not throughput). Do not restate either. What's left, and it is enough: where
+  the pressure lands once the buffer absorbs it, lag and queue age as the only
+  honest SLIs, and bounded vs. unbounded buffers. Needs a real incident where
+  the queue hid the problem, plus how long until anyone noticed.
 - **Propagating trace context across Kafka is the hard part nobody warns you
   about.** OpenTelemetry across a producer/consumer boundary; why HTTP
   propagation intuition breaks at the async hop; header injection patterns.
