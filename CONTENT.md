@@ -17,6 +17,12 @@ work lessons in the abstract as reusable principles; keep internals out.
   accept vs. edge validation, parse-don't-validate, alerting on the failure
   reason mix rather than throughput, and the cost of failing fast. Anything
   below that restates one of those is a rerun and should be cut.
+- **An auth gateway protects a path, not a service** (2026-09-19). A gate
+  attached to a load balancer only sees traffic that traverses it; a second
+  network path to the same backend is invisible to it, not blocked by it.
+  Also argues closing a path beats adding a second auth mechanism, and that
+  an environmental constraint filed as a per-component comment never
+  generalizes. Do not restate any of those.
 
 ## Tier 1 — highest leverage, write first
 
