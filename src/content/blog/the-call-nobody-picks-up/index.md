@@ -21,6 +21,7 @@ someone a no-show.
 
 So I built one. Disclosure first: I run engineering at
 [Sent](https://sent.dm), and our team just shipped voice agents to production.
+The voice stack is their work; for one evening I got to be its first customer.
 Read this as an insider's walkthrough, not a neutral review.
 
 ## Who does what
@@ -85,7 +86,9 @@ today.
 
 ## Step 2: describe the agent
 
-An agent is a record on your account. Everything but the name and session type
+An agent is a record on your account. Mine is for Northside Dental, a made-up
+clinic. A real clinic needs a HIPAA BAA with every vendor in the call path
+before patient details go through it. Everything but the name and session type
 has a default, so the body is the list of decisions:
 
 ```bash
@@ -98,7 +101,7 @@ curl -X POST https://api.sent.dm/v3/voice/agents \
 {
   "name": "Front desk, after hours",
   "session_type": "text",
-  "greeting": "Thanks for calling Northside Dental. The front desk is closed, but I can move an appointment or reach the dentist on call. How can I help?",
+  "greeting": "Thanks for calling Northside Dental. I'm the clinic's automated assistant and this call is transcribed. The front desk is closed, but I can move an appointment or reach the dentist on call. How can I help?",
   "tools": ["transfer", "hangup"],
   "transfer_targets": [{ "kind": "number", "value": "+12125550177" }],
   "fallback": { "kind": "number", "value": "+12125550177" },
@@ -336,10 +339,11 @@ model saw a move to a slot the caller already held and tried to be honest
 about it. The fix is one line in the prompt: tell the model what it already
 did on this call.
 
-![The Sent Activities page with the Call Details panel open. Status Completed, channel Voice, direction Inbound, from and to numbers partly hidden, started and answered at 11:15:12 and 11:15:13 PM, ended 11:16:23 PM, duration 1m 11s, price three cents, no recording. Timeline: Initiated, Answered, Completed.](./shot-7-activities-call-details.png)
+![The Sent Activities page with the Call Details panel open. Status Completed, channel Voice, direction Inbound, from and to numbers partly hidden, started and answered at 11:15:12 and 11:15:13 PM, ended 11:16:23 PM, duration 1m 11s, price about three cents on my account at today's rates, no recording. Timeline: Initiated, Answered, Completed.](./shot-7-activities-call-details.png)
 
 The call sits in Activities next to the text it sent. One minute eleven
-seconds, three cents, and a timeline of initiated, answered, completed.
+seconds, about three cents on my account at today's rates, and a timeline of
+initiated, answered, completed.
 
 ![A messaging thread on a phone with the number of the clinic, middle digits hidden. A Call ended bubble reading You called, 1:14, then an incoming text: Northside Dental: your appointment is now Friday at 8:00 AM. Reply to this message if that does not work.](./shot-8-confirmation-sms.png)
 
