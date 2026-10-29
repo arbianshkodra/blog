@@ -23,6 +23,13 @@ work lessons in the abstract as reusable principles; keep internals out.
   Also argues closing a path beats adding a second auth mechanism, and that
   an environmental constraint filed as a per-component comment never
   generalizes. Do not restate any of those.
+- **The call nobody picks up** (2026-10-29). Builds an after-hours dental
+  front-desk phone agent on Sent voice agents: three verbs only, the model
+  proposes and the code decides, and a templated text as the receipt. Also
+  covers a turn racing the session setup, plus the two bugs real calls found
+  that the test harness missed: a model that forgot what it had already done
+  on the call, and `agent.clear` taking back words but not actions. Do not
+  restate any of those.
 
 ## Tier 1 — highest leverage, write first
 
