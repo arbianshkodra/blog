@@ -10,8 +10,8 @@ tags:
 ---
 
 The first bucket was easy to kill. One JSON object per message status change,
-years of them, and every fact in them already sat in two tables with better
-types. Redundant. The log could go, and it went.
+and every fact in it already sat in two tables with better types. Redundant.
+The log could go, and it went.
 
 So I pointed the same audit at the two remaining buckets, customer activity
 and template activity, and sat down to write the same sentence. I never got
@@ -47,8 +47,8 @@ one JSON object in the activity bucket, sitting between a consent flip and a
 suspension.
 
 There had been a table. A migration created it. Two days later, another
-migration dropped it and moved notes into "the activity system". Somebody had
-a feature in hand and a log nearby, and the log was easier.
+migration dropped it and moved notes into the activity log. A feature was in
+hand, a log was nearby, and the log was easier.
 
 ## How a note lives in a bucket
 
@@ -145,9 +145,8 @@ logs is not a log. It is a dependency with a modest name.
 The purge has to remember it. A delete that walks the tables never reaches a
 bucket, so unless someone remembers the bucket, it keeps everything the purge
 was meant to remove, in the one store holding the facts that exist nowhere
-else. The records a deletion request was meant to erase, preserved by the
-store nobody thought to check. A foreign key with a cascade handles that
-without anyone having to remember anything.
+else. A foreign key with a cascade handles that without anyone having to
+remember anything.
 
 The lifecycle rule pointed at the wrong data. Deleting after a year is a
 reasonable default for a log. It is a bad default for consent history, which
