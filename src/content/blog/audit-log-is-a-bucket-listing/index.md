@@ -9,50 +9,57 @@ tags:
   - reliability
 ---
 
-Recently we moved a message timeline out of object storage. One JSON object
-per status change, and almost all of it duplicated two tables that already held
-the same facts with better types. That audit was easy. The log was redundant,
-so the log could go.
+The first bucket was easy to kill. One JSON object per message status change,
+years of them, and every fact in them already sat in two tables with better
+types. Redundant. The log could go, and it went.
 
-Then I pointed the same audit at the two remaining buckets, customer activity
-and template activity, expecting the same answer. I got the opposite one. Most
-of what those buckets held existed nowhere else, and that is the outcome you
-get by default.
+So I pointed the same audit at the two remaining buckets, customer activity
+and template activity, and sat down to write the same sentence. I never got
+to. Most of what those buckets held existed nowhere else. And one of the
+things they held was not a log at all. It was a feature.
+
+That is the outcome you get by default, and it is the worse of the two.
 
 ## What was only in the bucket
 
 Consent changes. The database kept one boolean per contact, the current value.
 Who flipped it, from what, through which channel, and when: object storage
-only.
+only. If a regulator asked for a contact's consent history, the answer was a
+prefix listing.
 
-Suspensions. Who suspended the customer, the reason, the free-text detail:
-object storage only. The database kept a boolean.
+Suspensions. Who suspended the customer, the reason, the free-text detail. The
+database kept a boolean. Object storage only.
 
-Template edits. A diff of which fields changed from what to what, rejected
-mutations with the reason, submission errors from the channel provider: object
+Template edits. A diff of which fields changed from what to what. Rejected
+mutations, with the reason. Submission errors from the channel provider. Object
 storage only.
 
-One table should have caught some of this, a lifecycle journal. It had never
-been written. It was wired correctly, in the same statement as the transition
-it records. Nothing had ever transitioned.
+One table should have caught some of this, a lifecycle journal. I checked it.
+Zero rows. It was wired correctly, written in the same statement as the
+transition it records. Nothing had ever transitioned.
 
-Then the part that made me write this. Customer notes, the free text an admin
-types about a customer, had no table at all. Each note was one JSON object in
-the activity bucket. There had been a table once. A migration created it, and
-another one two days later dropped it and moved notes into the activity
-system.
+Then the part that made me write this.
 
-A feature moved into the log because the log was there.
+Customer notes are the free text an admin types about a customer. Not an
+event, not a status change: content, authored by a person, that other people
+read back. I went looking for the notes table. There wasn't one. Each note was
+one JSON object in the activity bucket, sitting between a consent flip and a
+suspension.
+
+There had been a table. A migration created it. Two days later, another
+migration dropped it and moved notes into "the activity system". Somebody had
+a feature in hand and a log nearby, and the log was easier.
 
 ## How a note lives in a bucket
 
 Look at what that does to the three operations a note needs.
 
 Create returned 202 with an echo of the input, before anything was stored. It
-published an event, and a consumer picked it up and wrote the object. The admin
-UI refetched the list straight after the 202, which raced the consumer, so the
-note you had just written was sometimes missing from the list you got back. I
-have [written about that status code before](/blog/202-is-a-promise).
+published an event, a consumer picked it up, and the consumer wrote the
+object. The admin UI refetched the list straight after the 202, which raced
+the consumer, so the note you had just written was sometimes missing from the
+list you got back. I have [written about that status
+code before](/blog/202-is-a-promise). This was it, inside my own system.
 
 List was a prefix listing of every activity object under the customer,
 filtered by filename, then one GET per object.
@@ -61,20 +68,20 @@ Delete downloaded and deserialized every object under the customer, in order,
 until one matched the id.
 
 Then the author. The API returned the author's email, the UI read the author's
-name, and nothing mapped one to the other. Every note in the console showed
-its author as "Unknown". Nobody reported it, because nobody queries a bucket.
-You see a bucket one object at a time, and one object at a time everything
-looks fine.
+name, and nothing mapped one to the other. Every note in the console, every
+author: Unknown. Not one ticket. Nobody reported it, because nobody queries a
+bucket. You see a bucket one object at a time, and one object at a time
+everything looks fine.
 
 ## A bucket has one index
 
 The keys were built as type, then timestamp, then a hash of the body. The
 reader listed the prefix, reversed it, cut a page out, downloaded the page,
 and only then sorted what it had downloaded by time. Here is one customer's
-prefix in the only order object storage knows (keys invented, shape real):
+prefix in the only order object storage knows (keys invented, shape
+simplified):
 
 ```text
-consent/20261104T091502-3fa9c1d2.json
 consent/20261106T174410-b71e0a44.json
 note/20260912T110233-0c5d9e17.json
 suspension/20260611T080015-e2a4f6b9.json
@@ -82,9 +89,9 @@ suspension/20260702T142948-91d3c07a.json
 ```
 
 Reverse that and take a page of two. Page one of the admin's "raw log" is two
-suspensions from the summer, and yesterday's consent change is on the last
-page. Page one was always the alphabetically last activity type, newest first.
-Nobody had reported that either.
+suspensions from the summer. Yesterday's consent change is on the last page.
+Page one was always the alphabetically last activity type, newest first, and
+nobody had reported that either.
 
 That is the whole problem in one quirk. Object storage gives you exactly one
 index, the key, and exactly one query: keys with this prefix, in key order.
@@ -114,36 +121,40 @@ retention.
 
 Every one of those is a write-time property. The design was made by whoever
 had the event in hand and needed somewhere to put it, and at write time there
-is no read path. There is only the day someone asks, and the questions that
-arrive are all queries. Every consent change for this contact in this window:
-that is a regulator. Who suspended this account and what did they write: that
-is a support escalation. What changed on this template before it was rejected:
-that is a debugging session. Against a bucket, each one is a scan somebody
-writes by hand in a terminal, once, under time pressure.
+is no read path. There is only the day someone asks.
+
+That day comes, and the questions it brings are all queries. Every consent
+change for this contact in this window: that is a regulator, and they have a
+deadline. Who suspended this account and what did they write: that is a
+support escalation, and the customer is on the line. What changed on this
+template before it was rejected: that is a debugging session at the wrong
+hour. Against a bucket, each one is a scan somebody writes by hand in a
+terminal, once, under time pressure, and hopes they got right.
 
 ## The costs that were not queries
 
 Three things fell out of the audit that have nothing to do with reads, and I
 think they are the stronger argument.
 
-The log became a dependency. One review path wrote its activity object inline
-on the request, skipping the broker, and the code carried a comment recording
-what that had cost: a storage failure propagated up and took the rest of the
-review's work down with it. A log that can fail the thing it logs is not a
-log.
+The log took down the thing it was logging. One review path wrote its activity
+object inline on the request, skipping the broker, and the code carried a
+comment recording what that had cost: a storage failure propagated up and took
+the rest of the review's work down with it. A log that can fail the thing it
+logs is not a log. It is a dependency with a modest name.
 
 The purge has to remember it. A delete that walks the tables never reaches a
 bucket, so unless someone remembers the bucket, it keeps everything the purge
-was meant to remove, in the one store holding facts that exist nowhere else. A
-foreign key with a cascade handles that without anyone having to remember
-anything.
+was meant to remove, in the one store holding the facts that exist nowhere
+else. The records a deletion request was meant to erase, preserved by the
+store nobody thought to check. A foreign key with a cascade handles that
+without anyone having to remember anything.
 
 The lifecycle rule pointed at the wrong data. Deleting after a year is a
 reasonable default for a log. It is a bad default for consent history, which
 is the record you want to keep longest, because it is the one you get asked to
 produce. And the bucket was shared with uploaded sender assets, so the same
-rule was going to start deleting those too. Nobody had decided that. The rule
-decided it.
+rule was going to start deleting those too. It had a date. Nobody had picked
+it. The rule had.
 
 ## What it looks like as a table
 
@@ -173,7 +184,8 @@ contract did not move. The unique key on the hash plus `on conflict do
 nothing` is the replay idempotency the precondition write gave us, in one
 statement. The cascade is the purge fix. Notes got their own small table with
 a soft delete, create returns 201 with the stored row, and the author's name
-is resolved on read, which fixed "Unknown" without touching the console.
+is resolved on read. Every Unknown in the console became a name, and the
+console did not change.
 
 The write happens at the chokepoint, synchronously:
 
