@@ -24,8 +24,7 @@ That is the outcome you get by default, and it is the worse of the two.
 
 Consent changes. The database kept one boolean per contact, the current value.
 Who flipped it, from what, through which channel, and when: object storage
-only. If a regulator asked for a contact's consent history, the answer was a
-prefix listing.
+only.
 
 Suspensions. Who suspended the customer, the reason, the free-text detail. The
 database kept a boolean. Object storage only.
