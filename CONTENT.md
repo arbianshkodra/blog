@@ -30,6 +30,13 @@ work lessons in the abstract as reusable principles; keep internals out.
   that the test harness missed: a model that forgot what it had already done
   on the call, and `agent.clear` taking back words but not actions. Do not
   restate any of those.
+- **Your audit log is a bucket listing** (2026-11-08). An event log in object
+  storage has one index (the key) and one query (prefix in key order), so
+  every real question is a scan. Covers a feature (notes) living in the log,
+  key order grouping by type before time, the log failing the thing it logs,
+  a purge that never reaches the bucket, a lifecycle rule deciding retention
+  for the wrong data, and the one-table replacement with hash idempotency
+  written at the chokepoint. Do not restate any of those.
 
 ## Tier 1 — highest leverage, write first
 
@@ -53,6 +60,15 @@ work lessons in the abstract as reusable principles; keep internals out.
   companion to the reverse-proxy post.
 
 ## Tier 2 — strong, in the wheelhouse
+
+- **Retention is a per-record decision, not a storage setting.** The bucket
+  post shows one lifecycle rule deleting consent history and shared assets
+  on the same schedule as a log, and stops there. This one is the other
+  half: which records you must keep longest because you get asked to
+  produce them, which you must delete on request, and why both belong in
+  the schema next to the record rather than on the store. Bar to clear: at
+  least two record classes with opposite retention needs that I have
+  actually had to model; otherwise it restates the bucket post.
 
 - **Causal consistency vs. declared read policy.** The fallback post names
   causal consistency as the better tool for read-after-write and then moves

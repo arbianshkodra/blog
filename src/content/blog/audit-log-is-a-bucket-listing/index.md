@@ -1,8 +1,7 @@
 ---
 title: "Your audit log is a bucket listing"
 description: "An event log in object storage is a perfect write path with no read path. The questions arrive later, and every one of them is a query."
-date: "2026-11-07"
-draft: true
+date: "2026-11-08"
 tags:
   - postgres
   - data-modeling
